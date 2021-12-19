@@ -5,16 +5,15 @@
 #define  ENABLE_GxEPD2_display 1
 #include <GxEPD2_BW.h>
 #include <U8g2_for_Adafruit_GFX.h>
-// #include <Fonts/FreeMonoBold9pt7b.h>
-#include "DK_Lemon_Yellow_Sun40pt7b.h"
-#include "A_little_sunshine15pt7b.h"
-#include "A_little_sunshine20pt7b.h"
-#include "A_little_sunshine30pt7b.h"
-#include "A_little_sunshine40pt7b.h"
-// #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
-#include "bitmaps.h"
+#include "fonts/DK_Lemon_Yellow_Sun40pt7b.h"
+#include "fonts/A_little_sunshine15pt7b.h"
+#include "fonts/A_little_sunshine20pt7b.h"
+#include "fonts/A_little_sunshine30pt7b.h"
+#include "fonts/A_little_sunshine40pt7b.h"
+#include "assets/bitmaps.h"
 #include "GxEPD2_GFX.h"
 
+// Constant values for name/tag/price text boxes
 #define NAME_H 68
 #define TAG_H 30
 #define PRICE_H 74
@@ -73,7 +72,6 @@ const char burgerName[] = "New Bacon-ings";
 const char tagLine[] = "(Comes on Rye w/ Mustard, Cheese & Avocado)";
 const char price[] = "$5.95";
 
-
 void drawBitmaps800x480() {
   // Display BOTD bitmap
   display.drawBitmap(0, 0, Bitmap800x480_1, 480, 223, GxEPD_WHITE);
@@ -85,11 +83,6 @@ void drawBitmaps800x480() {
   // center the bounding box by transposition of the origin:
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
   uint16_t y = ((display.height() - tbh) / 2) - tby;
-  // display.setCursor(x, y);
-  // Serial.println(tbx);
-  // Serial.println(tby);
-  // Serial.println(tbw);
-  // Serial.println(tbh);
   Serial.println(tbh);
   display.setCursor(x, y - 15);
   display.print(burgerName);
