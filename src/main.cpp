@@ -5,12 +5,20 @@
 #define  ENABLE_GxEPD2_display 1
 #include <GxEPD2_BW.h>
 #include <U8g2_for_Adafruit_GFX.h>
-#include <Fonts/FreeMonoBold9pt7b.h>
+// #include <Fonts/FreeMonoBold9pt7b.h>
+#include "DK_Lemon_Yellow_Sun40pt7b.h"
+#include "A_little_sunshine15pt7b.h"
+#include "A_little_sunshine20pt7b.h"
+#include "A_little_sunshine30pt7b.h"
+#include "A_little_sunshine40pt7b.h"
+// #include "bitmaps/Bitmaps3c800x480.h" // 7.5"  b/w/r
+#include "bitmaps.h"
+#include "GxEPD2_GFX.h"
 
-#define SCREEN_WIDTH  800             // Set for landscape mode
-#define SCREEN_HEIGHT 480
-
-enum alignment {LEFT, RIGHT, CENTER};
+#define NAME_H 68
+#define TAG_H 30
+#define PRICE_H 74
+#define PRICE_X 171
 
 // Connections for e.g. LOLIN D32
 static const uint8_t EPD_BUSY = 4;  // to EPD BUSY
@@ -41,33 +49,77 @@ U8G2_FOR_ADAFRUIT_GFX u8g2Fonts;  // Select u8g2 font from here: https://github.
 // u8g2_font_helvB18_tf
 // u8g2_font_helvB24_tf
 
-const char HelloWorld[] = "boobs.";
+// We want to split a burger name into lines if it's too long
+// If a line is longer than X characters, dictated by font size (const) & screen size (const)
+// In this case, 800x480, X = 14
+#define MAX_CHAR_PER_LINE 14
+void renderBurgerName(char *name) {
+  // Divide string length by X we get number of lines Y
+  // We can allocate at most Z lines where Z = 4. Anything over that will have to suffice
+  const uint8_t lines = 1 + (strlen(name) / MAX_CHAR_PER_LINE);
 
-void helloWorld()
-{
-  display.setRotation(1);
-  display.setFont(&FreeMonoBold9pt7b);
-  display.setTextColor(GxEPD_BLACK);
+  // Since text height is fixed, we adjust starting y position based on number of lines
+  const uint16_t starting_y = ((display.height() - 40) / 2);
+}
+
+// Height and width of the price is constant, so we're hardcoding this
+void displayPrice(const char *_price) {
+  display.setFont(&A_little_sunshine40pt7b);
+  display.setCursor(PRICE_X, display.height() - PRICE_H);
+  display.print(_price);
+}
+
+const char burgerName[] = "New Bacon-ings";
+const char tagLine[] = "(Comes on Rye w/ Mustard, Cheese & Avocado)";
+const char price[] = "$5.95";
+
+
+void drawBitmaps800x480() {
+  // Display BOTD bitmap
+  display.drawBitmap(0, 0, Bitmap800x480_1, 480, 223, GxEPD_WHITE);
+
+  // Display burger name and tag
+  display.setFont(&DK_Lemon_Yellow_Sun40pt7b);
   int16_t tbx, tby; uint16_t tbw, tbh;
-  display.getTextBounds(HelloWorld, 0, 0, &tbx, &tby, &tbw, &tbh);
+  display.getTextBounds(burgerName, 0, 0, &tbx, &tby, &tbw, &tbh);
   // center the bounding box by transposition of the origin:
   uint16_t x = ((display.width() - tbw) / 2) - tbx;
   uint16_t y = ((display.height() - tbh) / 2) - tby;
+  // display.setCursor(x, y);
+  // Serial.println(tbx);
+  // Serial.println(tby);
+  // Serial.println(tbw);
+  // Serial.println(tbh);
+  Serial.println(tbh);
+  display.setCursor(x, y - 15);
+  display.print(burgerName);
+
+  display.setFont(&A_little_sunshine15pt7b);
+  display.getTextBounds(tagLine, 0, 0, &tbx, &tby, &tbw, &tbh);
+  x = ((display.width() - tbw) / 2) - tbx;
+  display.setCursor(x, y + 85);
+  Serial.println(tbh);
+  display.print(tagLine);
+
+  displayPrice(price);
+}
+
+void initDisplay() {
+  display.init();
+  display.setRotation(1);
+  display.fillScreen(GxEPD_BLACK);
+  display.setTextColor(GxEPD_WHITE);
   display.setFullWindow();
-  display.firstPage();
-  do
-  {
-    display.fillScreen(GxEPD_WHITE);
-    display.setCursor(x, y);
-    display.print(HelloWorld);
-  }
-  while (display.nextPage());
 }
 
 //#########################################################################################
 void setup() {
-  display.init();
-  helloWorld();
+  Serial.begin(115200);
+  initDisplay();
+  do {
+    drawBitmaps800x480();
+  }
+  while (display.nextPage());
   display.hibernate();
 }
 //#########################################################################################
