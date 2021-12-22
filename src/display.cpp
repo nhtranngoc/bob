@@ -29,7 +29,7 @@ void initDisplay() {
 }
 
 uint16_t displayBurgerName(const char *_name) {
-  display.setFont(&DK_Lemon_Yellow_Sun40pt7b);
+  display.setFont(&Hanoded___Lemon_Yellow_Sun40pt7b);
   // Divide string length by X we get number of lines Y
   // We can allocate at most Z lines where Z = 4. Anything over that will have to suffice
   String name = String(_name);

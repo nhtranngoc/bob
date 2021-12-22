@@ -5,9 +5,8 @@
 #include <SPI.h>                      // Built-in 
 #define  ENABLE_GxEPD2_display 1
 #include <GxEPD2_BW.h>
-#include "fonts/DK_Lemon_Yellow_Sun40pt7b.h"
+#include "fonts/Hanoded___Lemon_Yellow_Sun40pt7b.h"
 #include "fonts/A_little_sunshine15pt7b.h"
-#include "fonts/A_little_sunshine20pt7b.h"
 #include "fonts/A_little_sunshine30pt7b.h"
 #include "fonts/A_little_sunshine40pt7b.h"
 #include "assets/bitmaps.h"
@@ -25,8 +24,8 @@
 
 // We want to split a burger name into lines if it's too long
 // If a line is longer than X characters, dictated by font size (const) & screen size (const)
-// In this case, 800x480, X = 14
-#define MAX_CHAR_PER_NAME_LINE 14
+// In this case, 800x480, X = 13
+#define MAX_CHAR_PER_NAME_LINE 11
 #define MAX_CHAR_PER_TAG_LINE 23
 #define MAX_LINES 4
 
